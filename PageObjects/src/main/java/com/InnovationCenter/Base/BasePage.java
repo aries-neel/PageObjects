@@ -19,6 +19,7 @@ public class BasePage {
 	public static  WebDriver driver;
 	public static TopMenu menu;
 	
+	// just to check for git
 	
 	public BasePage() {
 		

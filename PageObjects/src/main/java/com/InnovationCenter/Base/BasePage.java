@@ -1,6 +1,10 @@
 package com.InnovationCenter.Base;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -18,6 +22,9 @@ public class BasePage {
 	// super to all the base pages as in it waraper over all the sub pages
 	public static  WebDriver driver;
 	public static TopMenu menu;
+	public static Properties or;
+	public FileInputStream fis;
+	
 	
 	// just to check for git
 	
@@ -25,6 +32,19 @@ public class BasePage {
 		
 		if(driver==null) {
 		 WebDriverManager.chromedriver().setup();
+		 try {
+			fis=new FileInputStream(System.getProperty("user.dir")+"//src//test//resources//properties//OR.properties");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 or=new Properties();
+		 try {
+			or.load(fis);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 
 		 ChromeOptions options = new ChromeOptions();
 		 HashMap<String, Object> prefs= new HashMap<String, Object>();
@@ -53,6 +73,18 @@ public class BasePage {
 		JavascriptExecutor js= (JavascriptExecutor)driver;
 		
   	      js.executeScript("window.scrollBy(350,400)");
+		
+	}
+	
+	public void type(String locator ,String value) {
+		
+		if(locator.endsWith("_CSS")) {
+			driver.findElement(By.cssSelector(or.getProperty(locator))).sendKeys(value);
+		}else if(locator.endsWith("_XPATH")) {
+			driver.findElement(By.xpath(or.getProperty(locator))).sendKeys(value);
+		}else  {
+			driver.findElement(By.id(or.getProperty(locator))).sendKeys(value);
+		}
 		
 	}
 
